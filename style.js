@@ -1,26 +1,41 @@
-function calculate() {
-  const num1 = parseFloat(document.getElementById("num1").value);
-  const num2 = parseFloat(document.getElementById("num2").value);
-  const operator = document.getElementById("operator").value;
-  let result;
+let displayValue = "";
 
-  switch (operator) {
-    case "add":
-      result = num1 + num2;
-      break;
-    case "subtract":
-      result = num1 - num2;
-      break;
-    case "multiply":
-      result = num1 * num2;
-      break;
-    case "divide":
-      result = num1 / num2;
-      break;
-    default:
-      result = "Geçersiz operatör";
-      break;
+function appendNumber(number) {
+  displayValue += number;
+  number = number.slice(0, -1);
+  updateDisplay();
+}
+
+function appendOperator(operator) {
+  if (displayValue.slice(-1).match(/[+\-*\/]/)) {
+    displayValue = displayValue.slice(0, -1);
   }
+  displayValue += operator;
+  updateDisplay();
+}
 
-  document.getElementById("result").textContent = result;
+function clearDisplay() {
+  displayValue = "";
+  updateDisplay();
+}
+
+function deleteChar() {
+  displayValue = displayValue.slice(0, -1);
+  updateDisplay();
+}
+
+function calculate() {
+  try {
+    const result = eval(displayValue);
+    displayValue = result.toString();
+    updateDisplay();
+  } catch (error) {
+    displayValue = "Error";
+    updateDisplay();
+  }
+}
+
+function updateDisplay() {
+  const display = document.getElementById("display");
+  display.value = displayValue;
 }
